@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2024, ETH Zurich (Robotics Systems Lab)
+# Copyright (c) 2023-2025, ETH Zurich (Robotics Systems Lab)
 # Author: Pascal Roth
 # All rights reserved.
 #
@@ -96,6 +96,13 @@ def main():
         "depth_camera": "distance_to_image_plane",
         "semantic_camera": "semantic_segmentation",
     }
+
+    # adustments if also RGB images should be rendered
+    if args_cli.scene == "matterport" and hasattr(scene_cfg, "rgb_camera"):
+        scene_cfg.rgb_camera.prim_path = "/World/rgb_camera"
+        cfg.cameras["rgb_camera"] = "rgb"
+    elif "rgb" in scene_cfg.semantic_camera.data_types:
+        cfg.cameras["semantic_camera"] = "rgb"
 
     # Load kit helper
     sim_cfg = sim_utils.SimulationCfg()
